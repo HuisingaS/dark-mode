@@ -4,11 +4,15 @@ import axios from "axios";
 
 import Charts from "./components/Charts";
 import Navbar from "./components/Navbar";
-
+import useDarkMode from './hooks/useDarkMode'
 import "./styles.scss";
+
+//darkMode was moved to App 
+//it is aware of state.
 
 const App = () => {
   const [coinData, setCoinData] = useState([]);
+  const [darkMode, setDarkMode] = useDarkMode("darkMode", false);
 
   useEffect(() => {
     axios
@@ -19,8 +23,13 @@ const App = () => {
       .catch(err => console.log(err));
   }, []);
   return (
-    <div className={darkmode ? "dark-mode App" : "App"}>
-      <Navbar />
+    
+    //if darkmode exists in state (condition is true), set the class to dark-mode App.. 
+    //Otherwise set class to app.
+
+    <div className= {darkMode ? "dark-mode App" : "App"}>
+    {/* pass slice of state to navbar via props */}
+      <Navbar darkMode = {darkMode} setDarkMode = {setDarkMode}/>
       <Charts coinData={coinData} />
     </div>
   );
